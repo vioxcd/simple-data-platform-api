@@ -23,6 +23,16 @@ func AddUser(c echo.Context) error {
 		})
 	}
 
+	err = repo.GetUser(&user)
+
+	if err != nil {
+		return c.JSON(500, models.BaseResponse{
+			Status:  false,
+			Message: "Failed to get data from the database",
+			Data:    nil,
+		})
+	}
+
 	return c.JSON(200, models.BaseResponse{
 		Status:  true,
 		Message: "Successfully created",
@@ -37,7 +47,7 @@ func Login(c echo.Context) error {
 	err := repo.Login(&user)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, models.BaseResponse{
-			Status: false,
+			Status:  false,
 			Message: "Username dan Password tidak cocok",
 		})
 	}
