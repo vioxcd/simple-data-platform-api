@@ -9,6 +9,8 @@ import (
 type User struct {
 	Id        int    `json:"id" gorm:"primaryKey"`
 	Name      string `json:"name" gorm:"not null"`
+	RoleId    uint   `json:"roleId"`
+	Role      Role   `json:"role"`
 	Email     string `json:"email" gorm:"unique"`
 	Password  string `json:"password"`
 	CreatedAt time.Time

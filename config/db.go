@@ -58,13 +58,35 @@ func ConnectToDB() {
 }
 
 func migration() {
-	DB.AutoMigrate(&models.User{}, &models.UserLog{})
+	DB.AutoMigrate(&models.UserLog{})
 
 	if err := DB.AutoMigrate(&models.Run{}); err == nil && DB.Migrator().HasTable(&models.Run{}) {
 		if err := DB.First(&models.Run{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 			DB.Create(&models.Run{
 				Type:        "All",
 				Description: "Run Snapshot for Data",
+			})
+		}
+	}
+
+	if err := DB.AutoMigrate(&models.Role{}); err == nil && DB.Migrator().HasTable(&models.Role{}) {
+		if err := DB.First(&models.Role{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			roles := []models.Role{
+				{Id: 1, Name: "Admin"},
+				{Id: 2, Name: "User"},
+			}
+			DB.Create(&roles)
+		}
+	}
+
+	if err := DB.AutoMigrate(&models.User{}); err == nil && DB.Migrator().HasTable(&models.User{}) {
+		if err := DB.First(&models.User{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			DB.Create(&models.User{
+				Id:   1,
+				Name: "Admin",
+				RoleId: 1,
+				Email: "admin@app.com",
+				Password: "admin",
 			})
 		}
 	}
