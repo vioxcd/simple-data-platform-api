@@ -3,11 +3,32 @@ package repo
 import (
 	"vioxcd/dpl/config"
 	"vioxcd/dpl/models"
+
+	"gorm.io/gorm"
 )
 
 func TriggerNewRun(log *models.UserLog) error {
 	result := config.DB.Create(log)
-	return result.Error
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return config.DB.Transaction(func(tx *gorm.DB) error {
+	  if err := tx.Exec("TRUNCATE TABLE snapshots").Error; err != nil {
+		return err
+	  }
+
+	  if err := tx.Exec(`
+			INSERT INTO snapshots
+			SELECT NULL, date, sum(amount)
+			FROM transactions
+			GROUP BY date
+		`).Error; err != nil {
+		return err
+	  }
+
+	  return nil
+	})
 }
 
 func GetLog(log *models.UserLog) error {
