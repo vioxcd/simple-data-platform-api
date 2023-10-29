@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"vioxcd/dpl/models"
 
 	"fmt"
@@ -57,5 +58,14 @@ func ConnectToDB() {
 }
 
 func migration() {
-	DB.AutoMigrate(&models.User{}, &models.Run{}, &models.UserLog{})
+	DB.AutoMigrate(&models.User{}, &models.UserLog{})
+
+	if err := DB.AutoMigrate(&models.Run{}); err == nil && DB.Migrator().HasTable(&models.Run{}) {
+		if err := DB.First(&models.Run{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			DB.Create(&models.Run{
+				Type:        "All",
+				Description: "Run Snapshot for Data",
+			})
+		}
+	}
 }
