@@ -55,14 +55,13 @@ func Login(c echo.Context) error {
 	var userResponse models.UserResponse
 	userResponse.Id = user.Id
 	userResponse.Name = user.Name
-	userResponse.Token = middlewares.GenerateToken(user.Id, user.Name)
+	userResponse.Token = middlewares.GenerateToken(user.Id, user.Name, user.RoleId)
 	userResponse.CreatedAt = user.CreatedAt
 	userResponse.UpdatedAt = user.UpdatedAt
 
 	return c.JSON(http.StatusOK, models.BaseResponse{
-		Status: true,
+		Status:  true,
 		Message: "Login successful",
-		Data: userResponse,
+		Data:    userResponse,
 	})
 }
-
