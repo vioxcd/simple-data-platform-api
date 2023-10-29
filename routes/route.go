@@ -16,8 +16,9 @@ func InitRoute(e *echo.Echo) {
 	eAuth := e.Group("")
 	eAuth.Use(echojwt.JWT([]byte(os.Getenv("JWT_SECRET_KEY"))))
 
-	e.POST("/user", controllers.AddUser)
 	e.POST("/login", controllers.Login)
+
+	eAuth.POST("/user", controllers.AddUser)
 
 	eAuth.GET("/log", controllers.GetRunsHistory)
 	eAuth.POST("/log", controllers.RunNewSnapshot)
