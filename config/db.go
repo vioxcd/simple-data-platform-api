@@ -57,5 +57,5 @@ func ConnectToDB() {
 }
 
 func migration() {
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.User{}, &models.Run{}, &models.UserLog{})
 }
