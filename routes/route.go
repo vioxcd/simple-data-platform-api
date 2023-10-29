@@ -18,4 +18,7 @@ func InitRoute(e *echo.Echo) {
 
 	e.POST("/user", controllers.AddUser)
 	e.POST("/login", controllers.Login)
+
+	eAuth.GET("/log", controllers.GetRunsHistory)
+	eAuth.POST("/log", controllers.RunNewSnapshot)
 }
