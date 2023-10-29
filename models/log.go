@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type UserLog struct {
 	gorm.Model
-	UserID     int    `json:"userId"`
+	UserID     uint   `json:"userId"`
 	User       User   `json:"user"`
-	RunID      int    `json:"runId"`
+	RunID      uint   `json:"runId"`
 	Run        Run    `json:"run"`
 	Parameters string `json:"parameters" gorm:"not null"`
 }
