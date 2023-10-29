@@ -21,4 +21,6 @@ func InitRoute(e *echo.Echo) {
 
 	eAuth.GET("/log", controllers.GetRunsHistory)
 	eAuth.POST("/log", controllers.RunNewSnapshot)
+
+	eAuth.GET("/snapshot", controllers.GetSnapshots)
 }
